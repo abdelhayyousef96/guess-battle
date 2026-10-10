@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+
+  <title>Guess Battle | ساحة التخمين</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Guess Battle">
+        <span class="brand-icon">⚔️</span>
+        <span>
+          <strong>GUESS BATTLE</strong>
+          <small>ساحة التخمين</small>
+        </span>
+      </a>
+
+      <button id="languageButton" class="icon-button" type="button"
+        aria-label="تغيير اللغة">
+        🌐
+      </button>
+    </header>
+
+    <main>
+      <section id="setupScreen" class="screen setup-screen">
+        <div class="hero">
+          <span class="eyebrow">🎯 تحدَّ الذكاء الاصطناعي</span>
+          <h1>هل تستطيع<br><span>هزيمة الذكاء؟</span></h1>
+          <p>
+            اختر شخصيتك سرًّا، واكتشف شخصية خصمك.
+            كل سؤال يقرّبك من الانتصار!
+          </p>
+        </div>
+
+        <div class="setup-card">
+          <h2>⚙️ إعداد المباراة</h2>
+
+          <label for="categorySelect">الفئة</label>
+          <select id="categorySelect">
+            <option value="football">⚽ لاعبو كرة القدم</option>
+            <option value="football_info">🏆 معلومات كرة القدم</option>
+            <option value="famous">🌟 مشاهير وشخصيات</option>
+            <option value="general">🧠 معلومات عامة</option>
+          </select>
+
+          <label for="difficultySelect">مستوى الصعوبة</label>
+          <select id="difficultySelect">
+            <option value="easy">🟢 سهل</option>
+            <option value="medium" selected>🟡 متوسط</option>
+            <option value="hard">🔴 صعب</option>
+          </select>
+
+          <label for="languageSelect">لغة المباراة</label>
+          <select id="languageSelect">
+            <option value="ar" selected>العربية</option>
+            <option value="en">English</option>
+          </select>
+
+          <div class="match-info">
+            <span>🏅 الأفضل من 3 جولات</span>
+            <span>🟥 بطاقة حمراء</span>
+            <span>🟦 بطاقة زرقاء</span>
+          </div>
+
+          <button id="startButton" class="primary-button" type="button">
+            ابدأ المباراة <span>←</span>
+          </button>
+        </div>
+
+        <p class="footer-note">
+          خطّط لأسئلتك جيدًا؛ كل إجابة قد تغيّر نتيجة المباراة.
+        </p>
+      </section>
+
+      <section id="gameScreen" class="screen game-screen" hidden>
+        <div class="match-header">
+          <button id="exitButton" class="text-button" type="button">
+            ← خروج
+          </button>
+          <span id="roundLabel">الجولة 1 من 3</span>
+          <span id="turnLabel" class="turn-badge">دورك</span>
+        </div>
+
+        <div class="scoreboard">
+          <div class="player-card human-card">
+            <span class="player-avatar">🧑</span>
+            <strong>أنت</strong>
+            <span id="humanScore" class="score">0</span>
+          </div>
+
+          <div class="score-divider">VS</div>
+
+          <div class="player-card ai-card">
+            <span class="player-avatar">🤖</span>
+            <strong>الذكاء الاصطناعي</strong>
+            <span id="aiScore" class="score">0</span>
+          </div>
+        </div>
+
+        <div class="secret-panel">
+          <div>
+            <span class="panel-caption">شخصيتك السرية</span>
+            <strong id="humanSecretStatus">لم تختر بعد</strong>
+          </div>
+          <span class="secret-icon">🔒</span>
+        </div>
+
+        <div class="cards-panel">
+          <div class="section-heading">
+            <h2>🃏 بطاقات المباراة</h2>
+            <span>لكل لاعب استخدام واحد من كل نوع</span>
+          </div>
+
+          <div class="cards-grid">
+            <button id="redCardButton" class="special-card red-card"
+              type="button" disabled>
+              <span class="card-icon">🟥</span>
+              <strong>البطاقة الحمراء</strong>
+              <small>اسأل 3 أسئلة متتالية</small>
+              <span id="redCardStatus">متاحة</span>
+            </button>
+
+            <button id="blueCardButton" class="special-card blue-card"
+              type="button" disabled>
+              <span class="card-icon">🟦</span>
+              <strong>البطاقة الزرقاء</strong>
+              <small>غيّر شخصيتك السرية</small>
+              <span id="blueCardStatus">متاحة</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="battle-panel">
+          <div class="section-heading">
+            <h2>💬 ساحة الأسئلة</h2>
+            <span id="questionCounter">0 سؤال</span>
+          </div>
+
+          <div id="chatLog" class="chat-log" aria-live="polite">
+            <div class="system-message">
+              تبدأ المباراة بعد اختيار شخصيتك السرية.
+            </div>
+          </div>
+
+          <form id="questionForm" class="question-form">
+            <input
+              id="questionInput"
+              type="text"
+              placeholder="اكتب سؤالًا إجابته نعم أو لا..."
+              autocomplete="off"
+              maxlength="250"
+              disabled
+            >
+            <button id="askButton" type="submit" disabled>إرسال</button>
+          </form>
+
+          <div id="answerChoices" class="answer-choices" hidden>
+            <button type="button" data-answer="yes">نعم</button>
+            <button type="button" data-answer="no">لا</button>
+            <button type="button" data-answer="unknown">لا أعرف</button>
+          </div>
+        </div>
+
+        <div class="guess-panel">
+          <label for="guessInput">🎯 هل عرفت شخصية الخصم؟</label>
+          <div class="guess-row">
+            <input id="guessInput" type="text"
+              placeholder="اكتب اسم الشخصية..." disabled>
+            <button id="guessButton" type="button" disabled>تخمين</button>
+          </div>
+        </div>
+
+        <div id="gameNotice" class="game-notice" aria-live="polite"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
